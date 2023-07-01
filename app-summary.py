@@ -10,6 +10,8 @@ from langchain import PromptTemplate
 from langchain.callbacks import get_openai_callback
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.summarize import load_summarize_chain
+from langchain.cache import InMemoryCache
+langchain.llm_cache = InMemoryCache()
 
 api_key = os.getenv("TOMARKDOWN_API_KEY")
 
