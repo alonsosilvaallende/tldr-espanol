@@ -37,8 +37,11 @@ def my_reading_time(num_tokens):
     return reading_time
 
 if URL:
+    progress_text = "Procesando. Por favor, espere."
+    my_bar = st.progress(0, text=progress_text)
     loader = ToMarkdownLoader(url=URL, api_key=api_key)
     docs = loader.load()
+    my_bar.progress(50, text=progress_text)
     documents = docs[0].page_content
     num_tokens = len(encoding.encode(documents))
     st.write(f":green[Tiempo de lectura del artículo original: {my_reading_time(num_tokens):.0f} minutos]")
@@ -56,6 +59,7 @@ if URL:
         st.write(f"The text is too long to be processed at this time")
     with get_openai_callback() as cb:
         result = chain.run(documents)
+        my_bar.progress(100, text="Proceso terminado")
         st.write(f":green[Tiempo de lectura del resumen: {my_reading_time(cb.completion_tokens):.0f} minuto]")
         st.write(f":green[Costo del resumen: {cb.total_cost+.01:.6f} dólares]") #2MarkDown charges 1 cent per webpage
 	
